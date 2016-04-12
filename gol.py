@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 # This is a implementation of Conway's Game of Life which is to show the
 # capabilities of the terminal_writer
