@@ -5,14 +5,16 @@
 
 from time import sleep
 from terminal_writer import Writer
+from serial import Serial
 
 WORLD_WIDTH = 80
 WORLD_HEIGHT = 40
 
 class World:
     def __init__(self, inital_cells):
+        serial_port = Serial("/dev/ttyAMA0", 9600)
         self.alive_cells = inital_cells
-        self.writer = Writer()
+        self.writer = Writer(output_file = serial_port)
 
     def update(self):
         new_cells = set()
