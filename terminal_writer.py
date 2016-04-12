@@ -2,13 +2,22 @@
 
 from sys import stdout as default_output
 
+COLOUR_BLACK = "\x1B[40m"
+COLOUR_RED = "\x1B[41m"
+COLOUR_GREEN = "\x1B[42m"
+COLOUR_YELLOW = "\x1B[43m"
+COLOUR_BLUE = "\x1B[44m"
+COLOUR_MAGENTA = "\x1B[45m"
+COLOUR_CYAN = "\x1B[46m"
+COLOUR_WHITE = "\x1B[47m"
+
 class Writer:
     # The output_file parameter allows the selection of another device or file
     # to use as output. The make_square parameter make all horizontal
     # manipulations twice as large to compensate for the fact that the terminal
-    # character size is proportially tall
+    # character size is proportionally tall
     def __init__(self, output_file = default_output, make_square = False):
-        self.last_state = set()
+        self.last_state = {}
         self.output_file = output_file
         self.make_square = make_square
         self.init_display()
@@ -20,17 +29,17 @@ class Writer:
         # The dark cells are the cells which have become dark since the last
         # render. This set is created from the light cells in the last render
         # with the cells which are currently light taken out
-        dark_cells = self.last_state - new_state
+        dark_cells = set(self.last_state.keys()) - set(new_state.keys())
 
-        # The light cells are the cells which have become light since the last
-        # render. This is just the reverse of the previous statement
-        light_cells = new_state - self.last_state
+        # The changed cells are the cells which have either been lit up since
+        # the previous render or have changed colour
+        changed_cells = {i for (i, j) in new_state.items() if j != self.last_state.get(i)}
 
         for (x, y) in dark_cells:
             self.mask_dot(x, y)
 
-        for (x, y) in light_cells:
-            self.write_dot(x, y)
+        for (x, y) in changed_cells:
+            self.write_dot(x, y, new_state[(x, y)])
 
         # Store the new state to compare with next time
         self.last_state = new_state
@@ -58,8 +67,8 @@ class Writer:
     def reset_colours(self):
         self.output_file.write("\x1B[0m")
     
-    def set_background_white(self):
-        self.output_file.write("\x1B[47m")
+    def set_background_colour(self, colour):
+        self.output_file.write(colour)
     
     # Map the background colour to be the "reset colour" as the background will
     # be blank
@@ -68,10 +77,10 @@ class Writer:
     
     # These two function combine the previous functions to either draw a dot or
     # to punch out a blank spot
-    def write_dot(self, x, y):
+    def write_dot(self, x, y, colour):
         self.reset_colours()
         self.set_cursor_position(x, y)
-        self.set_background_white()
+        self.set_background_colour(colour)
         if self.make_square:
             self.output_file.write("  ")
         else:
