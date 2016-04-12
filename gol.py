@@ -12,7 +12,7 @@ WORLD_HEIGHT = 40
 
 class World:
     def __init__(self, inital_cells):
-        serial_port = Serial("/dev/ttyAMA0", 9600)
+        serial_port = Serial("/dev/ttyAMA0", 38400)
         self.alive_cells = inital_cells
         self.writer = Writer(output_file = serial_port)
 
