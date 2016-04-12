@@ -6,7 +6,7 @@ class Writer:
     # The output_file parameter allows the selection of another device or file
     # to use as output. The make_square parameter make all horizontal
     # manipulations twice as large to compensate for the fact that the terminal
-    # character size is proportially tall
+    # character size is proportionally tall
     def __init__(self, output_file = default_output, make_square = False):
         self.last_state = set()
         self.output_file = output_file
