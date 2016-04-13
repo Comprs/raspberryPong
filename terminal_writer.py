@@ -104,6 +104,7 @@ class Writer:
     # Initialise the display. This involves hiding the cursor so that there
     # isn't a random dot on the display and clearing the display
     def init_display(self):
+        self.reset_colours()
         self.clear_display();
         self.hide_cursor()
         self.flush_output()
