@@ -6,6 +6,7 @@
 from time import sleep
 import terminal_writer
 from terminal_writer import Writer
+from clock import Clock
 from serial import Serial
 
 WORLD_WIDTH = 80
@@ -39,10 +40,11 @@ class World:
         self.writer.write_new_state(world.alive_cells)
 
     def start_loop(self):
+        clock = Clock(6.0)
         while True:
             self.render()
-            sleep(0.04)
             self.update()
+            clock.tick()
 
 if __name__ == "__main__":
     world = World({
