@@ -6,6 +6,7 @@
 from time import sleep
 import terminal_writer
 from terminal_writer import Writer
+from clock import Clock
 from serial import Serial
 
 WORLD_WIDTH = 80
@@ -39,51 +40,49 @@ class World:
         self.writer.write_new_state(world.alive_cells)
 
     def start_loop(self):
+        clock = Clock(6.0)
         while True:
             self.render()
-            sleep(0.04)
             self.update()
+            clock.tick()
 
 if __name__ == "__main__":
-    try:
-        world = World({
-            (24, 0): terminal_writer.COLOUR_RED,
-            (22, 1): terminal_writer.COLOUR_RED,
-            (24, 1): terminal_writer.COLOUR_RED,
-            (12, 2): terminal_writer.COLOUR_RED,
-            (13, 2): terminal_writer.COLOUR_RED,
-            (20, 2): terminal_writer.COLOUR_RED,
-            (21, 2): terminal_writer.COLOUR_RED,
-            (34, 2): terminal_writer.COLOUR_RED,
-            (35, 2): terminal_writer.COLOUR_RED,
-            (11, 3): terminal_writer.COLOUR_RED,
-            (15, 3): terminal_writer.COLOUR_RED,
-            (20, 3): terminal_writer.COLOUR_RED,
-            (21, 3): terminal_writer.COLOUR_RED,
-            (34, 3): terminal_writer.COLOUR_RED,
-            (35, 3): terminal_writer.COLOUR_RED,
-            (0, 4): terminal_writer.COLOUR_RED,
-            (1, 4): terminal_writer.COLOUR_RED,
-            (10, 4): terminal_writer.COLOUR_RED,
-            (16, 4): terminal_writer.COLOUR_RED,
-            (20, 4): terminal_writer.COLOUR_RED,
-            (21, 4): terminal_writer.COLOUR_RED,
-            (0, 5): terminal_writer.COLOUR_RED,
-            (1, 5): terminal_writer.COLOUR_RED,
-            (10, 5): terminal_writer.COLOUR_RED,
-            (14, 5): terminal_writer.COLOUR_RED,
-            (16, 5): terminal_writer.COLOUR_RED,
-            (17, 5): terminal_writer.COLOUR_RED,
-            (22, 5): terminal_writer.COLOUR_RED,
-            (24, 5): terminal_writer.COLOUR_RED,
-            (10, 6): terminal_writer.COLOUR_RED,
-            (16, 6): terminal_writer.COLOUR_RED,
-            (24, 6): terminal_writer.COLOUR_RED,
-            (11, 7): terminal_writer.COLOUR_RED,
-            (15, 7): terminal_writer.COLOUR_RED,
-            (12, 8): terminal_writer.COLOUR_RED,
-            (13, 8): terminal_writer.COLOUR_RED,
-        })
-        world.start_loop()
-    except KeyboardInterrupt:
-        pass
+    world = World({
+        (24, 0): terminal_writer.COLOUR_RED,
+        (22, 1): terminal_writer.COLOUR_RED,
+        (24, 1): terminal_writer.COLOUR_RED,
+        (12, 2): terminal_writer.COLOUR_RED,
+        (13, 2): terminal_writer.COLOUR_RED,
+        (20, 2): terminal_writer.COLOUR_RED,
+        (21, 2): terminal_writer.COLOUR_RED,
+        (34, 2): terminal_writer.COLOUR_RED,
+        (35, 2): terminal_writer.COLOUR_RED,
+        (11, 3): terminal_writer.COLOUR_RED,
+        (15, 3): terminal_writer.COLOUR_RED,
+        (20, 3): terminal_writer.COLOUR_RED,
+        (21, 3): terminal_writer.COLOUR_RED,
+        (34, 3): terminal_writer.COLOUR_RED,
+        (35, 3): terminal_writer.COLOUR_RED,
+        (0, 4): terminal_writer.COLOUR_RED,
+        (1, 4): terminal_writer.COLOUR_RED,
+        (10, 4): terminal_writer.COLOUR_RED,
+        (16, 4): terminal_writer.COLOUR_RED,
+        (20, 4): terminal_writer.COLOUR_RED,
+        (21, 4): terminal_writer.COLOUR_RED,
+        (0, 5): terminal_writer.COLOUR_RED,
+        (1, 5): terminal_writer.COLOUR_RED,
+        (10, 5): terminal_writer.COLOUR_RED,
+        (14, 5): terminal_writer.COLOUR_RED,
+        (16, 5): terminal_writer.COLOUR_RED,
+        (17, 5): terminal_writer.COLOUR_RED,
+        (22, 5): terminal_writer.COLOUR_RED,
+        (24, 5): terminal_writer.COLOUR_RED,
+        (10, 6): terminal_writer.COLOUR_RED,
+        (16, 6): terminal_writer.COLOUR_RED,
+        (24, 6): terminal_writer.COLOUR_RED,
+        (11, 7): terminal_writer.COLOUR_RED,
+        (15, 7): terminal_writer.COLOUR_RED,
+        (12, 8): terminal_writer.COLOUR_RED,
+        (13, 8): terminal_writer.COLOUR_RED,
+    })
+    world.start_loop()
