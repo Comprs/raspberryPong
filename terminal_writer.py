@@ -57,12 +57,12 @@ class Writer:
         self.output_file.write("\x1B[2J")
     
     def set_cursor_position(self, x, y):
-        x += 1
+        y += 1
         if self.make_square:
-            y = 2 * y + 1
+            x = 2 * x + 1
         else:
-            y += 1
-        self.output_file.write("\x1B[{};{}f".format(x, y))
+            x += 1
+        self.output_file.write("\x1B[{};{}f".format(y, x))
     
     def reset_colours(self):
         self.output_file.write("\x1B[0m")
