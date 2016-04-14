@@ -113,7 +113,6 @@ class Writer:
     def reset_display(self):
         self.show_cursor()
         self.reset_colours()
-        self.clear_display()
         self.set_cursor_position(0, 0)
         self.flush_output()
 
