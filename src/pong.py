@@ -70,7 +70,7 @@ class Bat(game_object.GameObject):
 
 class Pong:
     def __init__(self):
-        serial_output = Serial("/dev/ttyS0", 38400)
+        serial_output = Serial("/dev/ttyAMA0", 38400)
         self.output = terminal_writer.Writer(serial_output, True)
         self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(8, 8), terminal_writer.COLOUR_YELLOW)
         self.left_bat = Bat(Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
@@ -81,8 +81,8 @@ class Pong:
     def render(self):
         render_dict = {}
         render_dict.update({ (40, y): terminal_writer.COLOUR_WHITE for (y, do_draw) in zip(range(WORLD_HEIGHT), cycle([False, False, True, True])) if do_draw })
-        render_dict.update(convert_number(self.left_score, (35, 1)))
-        render_dict.update(convert_number(self.right_score, (43, 1)))
+        render_dict.update(convert_number(self.left_score, (29, 1)))
+        render_dict.update(convert_number(self.right_score, (49, 1)))
         render_dict.update(self.ball.render())
         render_dict.update(self.left_bat.render())
         render_dict.update(self.right_bat.render())
