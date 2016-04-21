@@ -1,0 +1,44 @@
+diff --git a/src/gol.py b/src/gol.py
+index 1ef861d..ce6192e 100755
+--- a/src/gol.py
++++ b/src/gol.py
+@@ -7,16 +7,14 @@ from time import sleep
+ import terminal_writer
+ from terminal_writer import Writer
+ from clock import Clock
+-from serial import Serial
+ 
+ WORLD_WIDTH = 80
+ WORLD_HEIGHT = 40
+ 
+ class World:
+     def __init__(self, inital_cells):
+-        serial_port = Serial("/dev/ttyAMA0", 38400)
+         self.alive_cells = inital_cells
+-        self.writer = Writer(output_file = serial_port)
++        self.writer = Writer()
+ 
+     def update(self):
+         new_cells = {}
+diff --git a/src/pong.py b/src/pong.py
+index 80afc7a..63bd62d 100755
+--- a/src/pong.py
++++ b/src/pong.py
+@@ -7,7 +7,6 @@ from vector import Vector, rect_intersect
+ from clock import Clock
+ from number_renderer import convert_number
+ from consts import WORLD_WIDTH, WORLD_HEIGHT
+-from serial import Serial
+ 
+ class Ball(game_object.GameObject):
+     def __init__(self, *args, **kwargs):
+@@ -70,8 +69,7 @@ class Bat(game_object.GameObject):
+ 
+ class Pong:
+     def __init__(self):
+-        serial_output = Serial("/dev/ttyAMA0", 38400)
+-        self.output = terminal_writer.Writer(serial_output, True)
++        self.output = terminal_writer.Writer(make_square = True)
+         self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(8, 8), terminal_writer.COLOUR_YELLOW)
+         self.left_bat = Bat(Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
+         self.right_bat = Bat(Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
