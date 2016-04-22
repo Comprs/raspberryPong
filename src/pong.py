@@ -7,6 +7,7 @@ from vector import Vector, rect_intersect
 from clock import Clock
 from number_renderer import convert_number
 from consts import WORLD_WIDTH, WORLD_HEIGHT, LED_GPIO_CODE
+import RPi.GPIO as GPIO
 from serial import Serial
 
 class Ball(game_object.GameObject):
@@ -28,7 +29,7 @@ class Ball(game_object.GameObject):
         self.intersect_bat(right_bat)
 
         rounded_pos = int(self.position.x)
-        for port, status zip(LED_GPIO_CODE, map(lambda x: x == rounded_pos / len(LED_GPIO_CODE), range(len(LED_GPIO_CODE)))):
+        for port, status in zip(LED_GPIO_CODE, map(lambda x: x == rounded_pos / len(LED_GPIO_CODE), range(len(LED_GPIO_CODE)))):
             GPIO.output(port, status)
 
     def intersect_bat(self, bat):
