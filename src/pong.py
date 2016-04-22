@@ -6,7 +6,7 @@ import game_object
 from vector import Vector, rect_intersect
 from clock import Clock
 from number_renderer import convert_number
-from consts import WORLD_WIDTH, WORLD_HEIGHT
+from consts import WORLD_WIDTH, WORLD_HEIGHT, LED_GPIO_CODE
 from serial import Serial
 
 class Ball(game_object.GameObject):
@@ -26,6 +26,10 @@ class Ball(game_object.GameObject):
 
         self.intersect_bat(left_bat)
         self.intersect_bat(right_bat)
+
+        rounded_pos = int(self.position.x)
+        for port, status zip(LED_GPIO_CODE, map(lambda x: x == rounded_pos / len(LED_GPIO_CODE), range(len(LED_GPIO_CODE)))):
+            GPIO.output(port, status)
 
     def intersect_bat(self, bat):
         if rect_intersect(self.position, self.size, bat.position, bat.size):
@@ -100,6 +104,11 @@ class Pong:
             self.ball.position = Vector(40, 20)
 
 if __name__ == "__main__":
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    for i in LED_GPIO_CODE:
+        GPIO.setup(i, GPIO.OUT)
+
     pong = Pong()
     clock = Clock(60.0)
     while True:
