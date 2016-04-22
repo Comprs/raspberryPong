@@ -28,8 +28,8 @@ class Ball(game_object.GameObject):
         self.intersect_bat(left_bat)
         self.intersect_bat(right_bat)
 
-        rounded_pos = int(self.position.x)
-        for port, status in zip(LED_GPIO_CODE, map(lambda x: x == rounded_pos / len(LED_GPIO_CODE), range(len(LED_GPIO_CODE)))):
+        rounded_pos = int(len(LED_GPIO_CODE) * self.position.x / WORLD_WIDTH)
+        for port, status in zip(LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(LED_GPIO_CODE)))):
             GPIO.output(port, status)
 
     def intersect_bat(self, bat):
