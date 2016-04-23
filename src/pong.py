@@ -4,7 +4,7 @@ from itertools import cycle
 import terminal_writer
 import game_object
 from vector import Vector, rect_intersect
-from clock import Clock
+from scheduler import Scheduler
 from number_renderer import convert_number
 from consts import WORLD_WIDTH, WORLD_HEIGHT, LED_GPIO_CODE
 import RPi.GPIO as GPIO
@@ -111,8 +111,7 @@ if __name__ == "__main__":
         GPIO.setup(i, GPIO.OUT)
 
     pong = Pong()
-    clock = Clock(60.0)
-    while True:
-        pong.update(clock.get_time_delta())
-        pong.render()
-        clock.tick()
+    schedule = Scheduler()
+    schedule.insert(lambda x: pong.update(x), 60.0)
+    schedule.insert(lambda x: pong.render(), 15.0)
+    schedule.start()
