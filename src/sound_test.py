@@ -3,7 +3,7 @@
 import array
 import subprocess
 
-import wave_gen, sequencer
+import wave_gen, wave_trans, sequencer
 from note_gen import ChromaticSeries, ChromaticHalfStep, get_frequency
 
 seq = sequencer.Sequencer()
@@ -56,7 +56,7 @@ seq.insert(wave_gen.SineWave(get_frequency(ChromaticSeries.D, 0, 4)), 22.0, 22.4
 seq.insert(wave_gen.SineWave(get_frequency(ChromaticSeries.D, 0, 4)), 22.5, 22.9)
 seq.insert(wave_gen.SineWave(get_frequency(ChromaticSeries.C, 0, 4)), 23.0, 23.9)
 
-seq_iter = seq.into_discrete_iter(8000)
+seq_iter = wave_trans.DiscreteWaveIterator(seq, 8000)
 
 ffplay = subprocess.Popen(["ffplay", "-f", "f32le", "-ar", "8000", "-ac", "1", "-nodisp", "-autoexit", "-"], stdin = subprocess.PIPE)
 
