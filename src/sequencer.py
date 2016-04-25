@@ -2,43 +2,13 @@
 
 """
 This module implements a sequencer which is used to arrange and mix numerous
-waves together
+predefined waves together over time
 """
 
 import math
-from wave_gen import Wave
+from wave_trans import TimedWave
 
-class SequencerItem(Wave):
-    """A class representing a single wave with timing information attached
-
-    This is implemented as a wave itself. It automatically translates the start
-    of the wave to the correct position in time and clips the wave as specified
-
-    Arguments:
-        wave: The wave which this item holds and samples
-        start_point: The point in time in which the sound starts
-        end_point: The point in time in which the sound ends
-    """
-
-    def __init__(self, wave, start_point, end_point):
-        self.wave = wave
-        self.start_point = start_point
-        self.end_point = end_point
-
-    def sample(self, time):
-        """Sample the contained wave
-
-        This delegates the retrieval of the value after applying time
-        translation and clipping
-
-        Arguments:
-            time: The point in time to sample
-        """
-        if time < self.start_point or time > self.end_point:
-            return None
-        return self.wave.sample(time - self.start_point)
-
-class Sequencer(Wave):
+class Sequencer(object):
     """A class which sequences waves
 
     This holds a list of lists of sequencer items. The top level list is split
@@ -71,7 +41,7 @@ class Sequencer(Wave):
                              .format(start_point))
 
         # Wrap the wave and associated wave points into an item for insertion
-        item = SequencerItem(wave, start_point, end_point)
+        item = TimedWave(wave, start_point, end_point)
 
         # Calculate the bounding indexes of the wave for the chunk list
         start_index = int(math.floor(start_point / self.chunk_granularity))
