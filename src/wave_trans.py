@@ -141,7 +141,7 @@ class Transition(object):
         if wave_2_sample == None:
             wave_2_sample = 0.0
         transition_ratio = (time - self.start_time) / (self.end_time - self.start_time)
-        return wave_1 * (1.0 - transition_ratio) + wave_2 * transition_ratio
+        return wave_1_sample * (1.0 - transition_ratio) + wave_2_sample * transition_ratio
 
 class Compress(object):
     def __init__(self, wave, magnitude):
