@@ -6,14 +6,17 @@ import game_object
 from vector import Vector, rect_intersect
 from scheduler import Scheduler
 from number_renderer import convert_number
-from consts import WORLD_WIDTH, WORLD_HEIGHT, LED_GPIO_CODE
+from consts import WORLD_WIDTH, WORLD_HEIGHT, LED_GPIO_CODE, CONTROL_I2C_ADDR, CONTROL_1_ADDR, CONTROL_2_ADDR
 import RPi.GPIO as GPIO
 from serial import Serial
+import smbus
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 for i in LED_GPIO_CODE:
     GPIO.setup(i, GPIO.OUT)
+
+bus = smbus.SMBus(1)
 
 class Ball(game_object.GameObject):
     def __init__(self, *args, **kwargs):
@@ -61,14 +64,23 @@ class Ball(game_object.GameObject):
             #        self.position.y = bat.position.y + bat.size.y
 
 class Bat(game_object.GameObject):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, control_address = None, *args, **kwargs):
+        self.control_address = control_address
         super(Bat, self).__init__(*args, **kwargs)
 
     def update(self, time, ball_y_pos):
-        #if ball_y_pos < self.position.y:
-        #    self.velocity = Vector(0, -10)
-        #elif ball_y_pos > self.position.y + self.size.y:
-        #    self.velocity = Vector(0, 10)
+	if self.control_address == None:
+            if ball_y_pos < self.position.y:
+                self.velocity = Vector(0, -10)
+            elif ball_y_pos > self.position.y + self.size.y:
+                self.velocity = Vector(0, 10)
+        else:
+            bus.write_byte(CONTROL_I2C_ADDR, self.control_address)
+            tmp = bus.read_word_data(CONTROL_I2C_ADDR, 0x00)
+            swap_tmp = ((tmp & 0x00FF) << 6) | ((tmp & 0xFF00) >> 10 )
+            height_ratio = swap_tmp / float(0b1111111111)
+            self.position = Vector(self.position.x, height_ratio * WORLD_HEIGHT)
+            self.velocity = Vector(0, 0)
 
         super(Bat, self).update(time)
 
@@ -83,8 +95,8 @@ class Pong:
         serial_output = Serial("/dev/ttyAMA0", 38400)
         self.output = terminal_writer.Writer(serial_output, True)
         self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(8, 8), terminal_writer.COLOUR_YELLOW)
-        self.left_bat = Bat(Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
-        self.right_bat = Bat(Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
+        self.left_bat = Bat(CONTROL_1_ADDR, Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
+        self.right_bat = Bat(CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
         self.left_score = 0
         self.right_score = 0
 
