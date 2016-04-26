@@ -10,6 +10,11 @@ from consts import WORLD_WIDTH, WORLD_HEIGHT, LED_GPIO_CODE
 import RPi.GPIO as GPIO
 from serial import Serial
 
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+for i in LED_GPIO_CODE:
+    GPIO.setup(i, GPIO.OUT)
+
 class Ball(game_object.GameObject):
     def __init__(self, *args, **kwargs):
         super(Ball, self).__init__(*args, **kwargs)
@@ -105,10 +110,6 @@ class Pong:
             self.ball.position = Vector(40, 20)
 
 if __name__ == "__main__":
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    for i in LED_GPIO_CODE:
-        GPIO.setup(i, GPIO.OUT)
 
     pong = Pong()
     schedule = Scheduler()
