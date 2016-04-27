@@ -134,9 +134,9 @@ class Transition(object):
     def sample(self, time):
         wave_1_sample = self.wave_1.sample(time)
         wave_2_sample = self.wave_2.sample(time)
-        if time < self.start_time:
+        if time <= self.start_time:
             return wave_1_sample
-        if time > self.end_time:
+        if time >= self.end_time:
             return wave_2_sample
         if wave_1_sample == None:
             wave_1_sample = 0.0
@@ -171,6 +171,14 @@ class VaryWave(object):
             wave_2_sample = 0.0
         vary_ratio = (vary_wave_sample + 1.0) / 2.0
         return wave_1_sample * (1.0 - vary_ratio) + wave_2_sample * vary_ratio
+
+class Loop(object):
+    def __init__(self, wave, loop_point):
+        self.wave = wave
+        self.loop_point = loop_point
+
+    def sample(self, time):
+        return self.wave.sample(time % self.loop_point)
 
 def attack_and_sustain(wave, sustain_time, attack_time = 0.0, decay_time = 0.0, sustain_punch = 1.0):
     none_wave = wave_gen.ConstantSignal(0.0)
