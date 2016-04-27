@@ -69,7 +69,7 @@ class Bat(game_object.GameObject):
         super(Bat, self).__init__(*args, **kwargs)
 
     def update(self, time, ball_y_pos):
-	if self.control_address == None:
+        if self.control_address == None:
             if ball_y_pos < self.position.y:
                 self.velocity = Vector(0, -10)
             elif ball_y_pos > self.position.y + self.size.y:
