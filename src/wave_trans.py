@@ -5,6 +5,8 @@ A module which contains wave adapters which are used to modify wave object which
 have a sample method
 """
 
+import wave_gen
+
 class DiscreteWaveIterator(object):
     """A iterator which yields values sampled at the given frequency
 
@@ -169,3 +171,14 @@ class VaryWave(object):
             wave_2_sample = 0.0
         vary_ratio = (vary_wave_sample + 1.0) / 2.0
         return wave_1_sample * (1.0 - vary_ratio) + wave_2_sample * vary_ratio
+
+def attack_and_sustain(wave, sustain_time, attack_time = 0.0, decay_time = 0.0, sustain_punch = 1.0):
+    none_wave = wave_gen.ConstantSignal(0.0)
+    sustain_point = attack_time
+    decay_point = sustain_point + sustain_time
+    end_point = decay_point + decay_time
+
+    wave = Transition(none_wave, wave, 0.0, sustain_point)
+    wave = Transition(wave, none_wave, decay_point, end_point)
+
+    return wave
