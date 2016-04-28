@@ -15,3 +15,5 @@ CONTROL_2_ADDR = None
 
 BUS = None
 SERIAL_OUTPUT = None
+
+MUSIC_SEQ = None
