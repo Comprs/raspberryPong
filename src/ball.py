@@ -27,8 +27,8 @@ class Ball(game_object.GameObject):
         self.intersect_bat(right_bat)
 
         if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-            rounded_pos = int(len(consts.LED_GPIO_CODE) * self.position.x / const.WORLD_WIDTH)
-            for port, status in zip(consts.LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(const.LED_GPIO_CODE)))):
+            rounded_pos = int(len(consts.LED_GPIO_CODE) * self.position.x / consts.WORLD_WIDTH)
+            for port, status in zip(consts.LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(consts.LED_GPIO_CODE)))):
                 GPIO.output(port, status)
 
     def intersect_bat(self, bat):
