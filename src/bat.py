@@ -17,11 +17,11 @@ class Bat(game_object.GameObject):
                 self.velocity = Vector(0, 10)
         else:
             pass
-            consts.BUS.write_byte(CONTROL_I2C_ADDR, self.control_address)
-            tmp = consts.BUS.read_word_data(CONTROL_I2C_ADDR, 0x00)
+            consts.BUS.write_byte(consts.CONTROL_I2C_ADDR, self.control_address)
+            tmp = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
             swap_tmp = ((tmp & 0x00FF) << 6) | ((tmp & 0xFF00) >> 10 )
             height_ratio = swap_tmp / float(0b1111111111)
-            self.position = Vector(self.position.x, height_ratio * WORLD_HEIGHT)
+            self.position = Vector(self.position.x, height_ratio * consts.WORLD_HEIGHT)
             self.velocity = Vector(0, 0)
 
         super(Bat, self).update(time)

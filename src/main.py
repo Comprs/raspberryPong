@@ -9,7 +9,7 @@ from mixer import Mixer
 if __name__ == "__main__":
     init_state.init()
     pong = Pong()
-    mixer = Mixer()
+    mixer = Mixer(lambda x: None)
     mixer.insert(consts.MUSIC_SEQ, float("inf"))
     schedule = Scheduler()
     schedule.insert(lambda x: pong.update(x), 60.0)
