@@ -27,8 +27,10 @@ def setup():
         GPIO.add_event_detect(channel[ch], GPIO.RISING)
         if ch == 0 or ch == 2:
             GPIO.add_event_callback(channel[ch], if ch == 0: serv_player1 else: serv_player2, bouncetime = 200)
-        elif ch == 1 or ch == 3:
-            GPIO.add_event_callback(channel[ch], if ch == 1: powerup_player1 else: powerup_player2, bouncetime = 200) 
+        elif ch == 1:
+            GPIO.add_event_callback(channel[ch], powerup_player1, bouncetime = 200) 
+        elif ch ==3:
+            GPIO.add_event_callback(channel[ch], powerup_player2)
 
 
         
