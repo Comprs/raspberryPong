@@ -59,6 +59,6 @@ def init():
              (ChromaticSeries.C, 0, 4, 23.0, 23.9)]
     
     for (series, a, b, c, d) in music:
-        seq.insert(wave_gen.SineWave(get_frequency(series, a, b)), c, d)
+        seq.insert(wave_gen.SquareWave(get_frequency(series, a, b)), c, d)
 
     consts.MUSIC_SEQ = wave_trans.Loop(seq, 24.5)

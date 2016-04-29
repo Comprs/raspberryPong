@@ -34,7 +34,7 @@ music = [(ChromaticSeries.C, 0, 4, 0.0, 0.4), (ChromaticSeries.C, 0, 4, 0.5, 0.9
          (ChromaticSeries.C, 0, 4, 23.0, 23.9)]
     
 for (series, a, b, c, d) in music:
-    seq.insert(wave_gen.SineWave(get_frequency(series, a, b)), c, d)
+    seq.insert(wave_gen.SquareWave(get_frequency(series, a, b)), c, d)
 
 seq_iter = wave_trans.DiscreteWaveIterator(seq, 8000)
 
