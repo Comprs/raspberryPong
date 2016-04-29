@@ -32,17 +32,9 @@ class Ball(game_object.GameObject):
                 GPIO.output(port, status)
 
     def intersect_bat(self, bat):
-        #TODO: Rework this later
         if rect_intersect(self.position, self.size, bat.position, bat.size):
-            ball_centre = Vector(self.position.x + self.size.x / 2.0, self.position.y + self.size.y / 2.0)
-            bat_centre = Vector(bat.position.x + bat.size.x / 2.0, bat.position.y + bat.size.y / 2.0)
-            difference = ball_centre - bat_centre
-            if abs(difference.x) < abs(difference.y):
-                # Horizontal
-                self.velocity.x = -self.velocity.x
-                if difference.x < 0:
-                    # Colliding on the right
-                    self.position.x = bat.position.x - self.size.x
-                else:
-                    # Colliding on the left
-                    self.position.x = bat.position.x + bat.size.x
+            self.velocity.x = -self.velocity.x
+            if self.velocity.x > 0:
+                self.position.x = bat.position.x + bat.size.x
+            elif self.velocity.x < 0:
+                self.position.x = bat.position.x - self.size.x
