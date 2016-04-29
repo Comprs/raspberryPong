@@ -62,3 +62,7 @@ def init():
         seq.insert(wave_gen.SquareWave(get_frequency(series, a, b)), c, d)
 
     consts.MUSIC_SEQ = wave_trans.Loop(seq, 24.5)
+    consts.MIXER_QUEUE.put((consts.MUSIC_SEQ, float("inf")))
+
+    if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
+        GPIO.setup(consts.BUZZER_GPIO_CODE, GPIO.OUT)
