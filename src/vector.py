@@ -17,6 +17,12 @@ class Vector:
     def __div__(self, other):
         return Vector(self.x / other, self.y / other)
 
+    def magnitude(self):
+        return (self.x ** 2 + self.y ** 2) ** 0.5
+
+    def unit_vector(self):
+        return self / self.magnitude()
+
 def rect_intersect(pos_1, size_1, pos_2, size_2):
     return not (pos_1.x + size_1.x < pos_2.x or
                 pos_2.x + size_2.x < pos_1.x or
