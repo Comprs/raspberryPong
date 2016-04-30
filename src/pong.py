@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 from itertools import cycle
+import math
 import terminal_writer
 from vector import Vector
 from number_renderer import convert_number
@@ -12,8 +13,8 @@ class Pong:
     def __init__(self):
         self.output = terminal_writer.Writer(consts.SERIAL_OUTPUT, True)
         self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(8, 8), terminal_writer.COLOUR_YELLOW)
-        self.left_bat = Bat(consts.CONTROL_1_ADDR, Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
-        self.right_bat = Bat(consts.CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
+        self.left_bat = Bat((math.pi * -0.25, 0, math.pi * 0.25), consts.CONTROL_1_ADDR, Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
+        self.right_bat = Bat((math.pi * -0.75, 0, math.pi * 0.75), consts.CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
         self.left_score = 0
         self.right_score = 0
 

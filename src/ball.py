@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 import consts
+import random
 
 if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
     import RPi.GPIO as GPIO
@@ -33,7 +34,15 @@ class Ball(game_object.GameObject):
 
     def intersect_bat(self, bat):
         if rect_intersect(self.position, self.size, bat.position, bat.size):
-            self.velocity.x = -self.velocity.x
+            if self.position.y + self.size.y * 0.5 < bat.position.y + bat.size.y * (1.0 / 3.0):
+                return_angle = bat.return_angles[0]
+            elif self.position.y + self.size.y * 0.5 > bat.position.y + bat.size.y * (2.0 / 3.0):
+                return_angle = bat.return_angles[2]
+            else:
+                return_angle = bat.return_angles[1]
+
+            self.velocity = Vector.create_with_angle(return_angle) * (80.0 / random.choice([2, 2, 2, 5, 5, 5, 15]))
+
             if self.velocity.x > 0:
                 self.position.x = bat.position.x + bat.size.x
             elif self.velocity.x < 0:
