@@ -1,5 +1,9 @@
 #!/usr/bin/env python2
 
+"""
+This module initialises the global constants
+"""
+
 import consts
 
 if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:

@@ -1,9 +1,22 @@
 #!/usr/bin/env python2
 
+"""This module contains the base class which is derived by the game objects
+which are used in the game
+"""
+
 from vector import Vector
 from consts import WORLD_WIDTH, WORLD_HEIGHT
 
 class GameObject(object):
+    """This object is derived by other game objects in order to reuse the 
+    vector update code and the render code
+
+    Arguments:
+        position: the start position of the object
+        size the size of the object
+        velocity: the initial velocity of the object
+        colour: the colour which the renderer will render with
+    """
     def __init__(self, position, size, velocity, colour):
         self.position = position
         self.size = size
@@ -11,6 +24,9 @@ class GameObject(object):
         self.colour = colour
 
     def render(self):
+        """Draw out the game object based on the size and position of the
+        object
+        """
         x_origin = int(round(self.position.x))
         y_origin = int(round(self.position.y))
         return {
@@ -21,4 +37,9 @@ class GameObject(object):
         }
 
     def update(self, time):
+        """Update the position
+
+        Arguments:
+            time: the time since the last call
+        """
         self.position += self.velocity * time

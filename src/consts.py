@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 
+"""This module contains the global constants to be used by the program"""
+
 import multiprocessing
 import wave_gen
 import wave_trans
