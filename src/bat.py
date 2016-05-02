@@ -18,7 +18,13 @@ class Bat(game_object.GameObject):
             consts.BUS.write_byte(consts.CONTROL_I2C_ADDR, self.control_address)
             tmp = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
             swap_tmp = ((tmp & 0x00FF) << 6) | ((tmp & 0xFF00) >> 10 )
-            height_ratio = swap_tmp / float(0b1111111111)
+            try:
+                VOLTS # Define this to active scaling
+                VMIN, VMAX = 0.5, 2.5
+                swap_tmp = max(min(swap_tmp, VMAX*VOLTS), VMIN*VOLTS)
+                height_ratio = (swap_tmp - VMIN*VOLTS)/((VMAX-VMIN)*VOLTS) # Probably doesn't work correctly
+            except:
+                height_ratio = swap_tmp / float(0b1111111111)
             self.position = Vector(self.position.x, height_ratio * consts.WORLD_HEIGHT)
             self.velocity = Vector(0, 0)
 
