@@ -18,6 +18,7 @@ class Ball(game_object.GameObject):
 
     def __init__(self, *args, **kwargs):
         super(Ball, self).__init__(*args, **kwargs)
+        self.attached_bat = None
 
     def update(self, time, left_bat, right_bat):
         """Perform the update based on the time difference given. It also takes
@@ -79,3 +80,7 @@ class Ball(game_object.GameObject):
                 self.position.x = bat.position.x + bat.size.x
             elif self.velocity.x < 0:
                 self.position.x = bat.position.x - self.size.x
+
+    def serve(self, bat_num):
+        if bat_num == self.attached_bat:
+            #Something

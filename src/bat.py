@@ -4,14 +4,18 @@ import random
 import consts
 from vector import Vector
 import game_object
+import time
 
 class Bat(game_object.GameObject):
     def __init__(self, return_angles, control_address = None, *args, **kwargs):
         self.return_angles = return_angles
         self.control_address = control_address
+        self.next_shrink = 0.0
         super(Bat, self).__init__(*args, **kwargs)
 
     def update(self, time, ball_y_pos):
+        if time.time() >= self.next_shrink:
+            self.size.y = 3
         if self.control_address == None:
             self.position.y = ball_y_pos - random.choice([0, 0, 0, 1, 2, 2, 2])
         else:
@@ -36,3 +40,7 @@ class Bat(game_object.GameObject):
 
         if round(self.position.y + self.size.y) > consts.WORLD_HEIGHT:
             self.position.y = consts.WORLD_HEIGHT - self.size.y
+
+    def enlarge(self):
+        self.next_shrink = time.time() + 15.0
+        self.size.y = 5

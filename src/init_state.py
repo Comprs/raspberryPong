@@ -28,6 +28,13 @@ def init():
         for i in consts.LED_GPIO_CODE:
             GPIO.setup(i, GPIO.OUT)
 
+        for i in [consts.PLAYER_1_SERVE,
+                  consts.PLAYER_2_SERVE,
+                  consts.PLAYER_1_ENLARGE,
+                  consts.PLAYER_2_ENLARGE]:
+            GPIO.setup(i, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            GPIO.add_event_detect(i, GPIO.RISING)
+
         consts.SERIAL_OUTPUT = Serial("/dev/ttyAMA0", 38400)
 
         consts.CONTROL_1_ADDR = 0x10
