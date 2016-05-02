@@ -25,7 +25,8 @@ class Bat(game_object.GameObject):
                 height_ratio = (swap_tmp - VMIN*VOLTS)/((VMAX-VMIN)*VOLTS) # Probably doesn't work correctly
             except:
                 height_ratio = swap_tmp / float(0b1111111111)
-            self.position = Vector(self.position.x, height_ratio * consts.WORLD_HEIGHT)
+            new_position_y = height_ratio * const.WORLD_HEIGHT
+            self.position = Vector(self.position.x, new_position_y if abs(new_position_y - self.position.y) > consts.INPUT_THRESHOLD else self.position.y)
             self.velocity = Vector(0, 0)
 
         super(Bat, self).update(time)

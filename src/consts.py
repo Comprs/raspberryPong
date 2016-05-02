@@ -28,3 +28,5 @@ BALL_BOUNCE_SFX = wave_trans.attack_and_sustain(wave_trans.VaryWave(wave_gen.Squ
                                                                     wave_gen.SquareWave(800),
                                                                     wave_gen.SineWave(12)),
                                                 0, 0, 0.25)
+
+INPUT_THRESHOLD = 0 # Currently no noise rejection
