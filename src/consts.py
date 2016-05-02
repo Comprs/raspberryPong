@@ -21,3 +21,7 @@ SERIAL_OUTPUT = None
 
 MUSIC_SEQ = None
 MIXER_QUEUE = multiprocessing.Queue()
+
+BALL_BOUNCE_SFX = wave_trans.attack_and_sustain(wave_trans.VaryWave(wave_gen.SquareWave(400),
+                                                                    wave_gen.SquareWave(800),
+                                                                    wave_gen.SineWave(12)),

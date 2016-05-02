@@ -19,10 +19,12 @@ class Ball(game_object.GameObject):
         if round(self.position.y) < 0:
             self.position.y = 0
             self.velocity.y = -self.velocity.y
+            consts.MIXER_QUEUE.put(consts.BALL_BOUNCE_SFX)
 
         if round(self.position.y + self.size.y) > consts.WORLD_HEIGHT:
             self.position.y = consts.WORLD_HEIGHT - self.size.y
             self.velocity.y = -self.velocity.y
+            consts.MIXER_QUEUE.put(consts.BALL_BOUNCE_SFX)
 
         self.intersect_bat(left_bat)
         self.intersect_bat(right_bat)
@@ -34,6 +36,7 @@ class Ball(game_object.GameObject):
 
     def intersect_bat(self, bat):
         if rect_intersect(self.position, self.size, bat.position, bat.size):
+            consts.MIXER_QUEUE.put(consts.BALL_BOUNCE_SFX)
             if self.position.y + self.size.y * 0.5 < bat.position.y + bat.size.y * (1.0 / 3.0):
                 return_angle = bat.return_angles[0]
             elif self.position.y + self.size.y * 0.5 > bat.position.y + bat.size.y * (2.0 / 3.0):
