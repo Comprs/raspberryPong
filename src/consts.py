@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 
 import multiprocessing
+import wave_gen
+import wave_trans
 
 class PossibleTargets:
     GENERIC_TERMINAL = 0
@@ -25,3 +27,4 @@ MIXER_QUEUE = multiprocessing.Queue()
 BALL_BOUNCE_SFX = wave_trans.attack_and_sustain(wave_trans.VaryWave(wave_gen.SquareWave(400),
                                                                     wave_gen.SquareWave(800),
                                                                     wave_gen.SineWave(12)),
+                                                0, 0, 0.25)
