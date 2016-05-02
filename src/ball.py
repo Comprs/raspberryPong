@@ -83,4 +83,4 @@ class Ball(game_object.GameObject):
 
     def serve(self, bat_num):
         if bat_num == self.attached_bat:
-            #Something
+            pass

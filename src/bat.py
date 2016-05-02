@@ -13,7 +13,7 @@ class Bat(game_object.GameObject):
         self.next_shrink = 0.0
         super(Bat, self).__init__(*args, **kwargs)
 
-    def update(self, time, ball_y_pos):
+    def update(self, timedelta, ball_y_pos):
         if time.time() >= self.next_shrink:
             self.size.y = 3
         if self.control_address == None:
@@ -33,7 +33,7 @@ class Bat(game_object.GameObject):
             self.position = Vector(self.position.x, new_position_y if abs(new_position_y - self.position.y) > consts.INPUT_THRESHOLD else self.position.y)
             self.velocity = Vector(0, 0)
 
-        super(Bat, self).update(time)
+        super(Bat, self).update(timedelta)
 
         if round(self.position.y) < 0:
             self.position.y = 0
