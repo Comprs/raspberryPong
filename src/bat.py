@@ -22,6 +22,7 @@ class Bat(game_object.GameObject):
             consts.BUS.write_byte(consts.CONTROL_I2C_ADDR, self.control_address)
             tmp = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
             swap_tmp = ((tmp & 0x00FF) << 6) | ((tmp & 0xFF00) >> 10 )
+            swap_tmp = max(min(swap_tmp, consts.VMAX), consts.VMIN)
             height_ratio = (swap_tmp - consts.VMIN) / (consts.VMAX - const.VMIN)
             new_position_y = height_ratio * const.WORLD_HEIGHT
             if abs(new_position_y - self.position.y) > consts.INPUT_THRESHOLD:
