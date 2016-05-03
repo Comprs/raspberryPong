@@ -33,12 +33,12 @@ class Ball(game_object.GameObject):
         if round(self.position.y) < 0:
             self.position.y = 0
             self.velocity.y = -self.velocity.y
-            consts.MIXER_QUEUE.put(consts.BALL_BOUNCE_SFX)
+            consts.MIXER_QUEUE.put((consts.BALL_BOUNCE_SFX, 0.25))
 
         if round(self.position.y + self.size.y) > consts.WORLD_HEIGHT:
             self.position.y = consts.WORLD_HEIGHT - self.size.y
             self.velocity.y = -self.velocity.y
-            consts.MIXER_QUEUE.put(consts.BALL_BOUNCE_SFX)
+            consts.MIXER_QUEUE.put((consts.BALL_BOUNCE_SFX, 0.25))
 
         # Check for collisions with the bats
         self.intersect_bat(left_bat)
@@ -60,7 +60,7 @@ class Ball(game_object.GameObject):
         # bounding boxes
         if rect_intersect(self.position, self.size, bat.position, bat.size):
             # Queue up the sound effect for playing
-            consts.MIXER_QUEUE.put(consts.BALL_BOUNCE_SFX)
+            consts.MIXER_QUEUE.put((consts.BALL_BOUNCE_SFX, 0.25))
 
             # Get the angle to reflect with base upon the position the ball
             # collided with
