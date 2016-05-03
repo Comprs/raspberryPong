@@ -23,6 +23,12 @@ CONTROL_2_ADDR = None
 BUS = None
 SERIAL_OUTPUT = None
 
+PLAYER_1_SERVE = None
+PLAYER_2_SERVE = None
+
+PLAYER_1_ENLARGE = None
+PLAYER_2_ENLARGE = None
+
 MUSIC_SEQ = None
 MIXER_QUEUE = multiprocessing.Queue()
 
