@@ -66,6 +66,20 @@ class TimedWave(object):
             return None
         return self.wave.sample(time - self.start_point)
 
+class Map(object):
+    """A class to map a sampled value from a wave using the provided function
+
+    Arguments:
+        wave: the wave to sample
+        func: the function to apply to the sample value
+    """
+    def __init__(self, wave, func):
+        self.wave = wave
+        self.func = func
+
+    def sample(self, time):
+        return self.func(self.wave.sample(time))
+
 class Multiply(object):
     def __init__(self, wave_1, wave_2):
         self.wave_1 = wave_1
