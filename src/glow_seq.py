@@ -26,13 +26,13 @@ class GlowPattern(object):
         self.light_function_association[led_code] = pattern_wave
 
 class GlowSequencer(object):
-    def __init__(self, pi_glow_obj = PiGlow()):
+    def __init__(self, pi_glow_obj = py_glow.PyGlow()):
         self.current_time = 0.0
         self.pi_glow_obj = pi_glow_obj
         self.pattern_stack = []
 
     def insert(self, pattern):
-        self.pattern_length.append(pattern)
+        self.pattern_stack.append(pattern)
 
     def sample(self, time_delta):
         self.current_time += time_delta
@@ -40,3 +40,5 @@ class GlowSequencer(object):
         sample_buffer = {x: 0.0 for x in py_glow.LED_LIST}
         for i in self.pattern_stack:
             sample_buffer.update(i.sample(self.current_time))
+        for (led, value) in sample_buffer.items():
+            self.pi_glow_obj.led(key, value)
