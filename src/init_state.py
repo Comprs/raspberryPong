@@ -33,7 +33,6 @@ def init():
                   consts.PLAYER_1_ENLARGE,
                   consts.PLAYER_2_ENLARGE]:
             GPIO.setup(i, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            GPIO.add_event_detect(i, GPIO.RISING)
 
         consts.SERIAL_OUTPUT = Serial("/dev/ttyAMA0", 38400)
 

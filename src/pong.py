@@ -9,7 +9,7 @@ import consts
 from ball import Ball
 from bat import Bat
 if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-    import rpi.GPIO as GPIO
+    import RPi.GPIO as GPIO
 
 class Pong:
     def __init__(self):
@@ -20,10 +20,10 @@ class Pong:
         self.left_score = 0
         self.right_score = 0
         if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-            GPIO.add_event_callback(consts.PLAYER_1_SERVE, lambda: self.ball.serve(1), bouncetime = 200)
-            GPIO.add_event_callback(consts.PLAYER_1_ENLARGE, self.left_bat.enlarge, bouncetime = 200)
-            GPIO.add_event_callback(consts.PLAYER_2_SERVE, lambda: self.ball.serve(2), bouncetime = 200)
-            GPIO.add_event_callback(consts.PLAYER_2_ENLARGE, self.right_bat.enlarge, bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_1_SERVE, GPIO.RISING, lambda: self.ball.serve(1), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_1_ENLARGE, GPIO.RISING, lambda: self.ball.enlarge, bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda: self.ball.serve(2), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_2_ENLARGE, GPIO.RISING, lambda: self.ball.enlarge, bouncetime = 200)
 
     def render(self):
         render_dict = {}
