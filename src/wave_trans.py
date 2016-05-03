@@ -138,6 +138,14 @@ class ClipLeft(object):
             return None
         return self.wave.sample(time)
 
+class Translate(object):
+    def __init__(self, wave, translation):
+        self.wave = wave
+        self.translation = translation
+
+    def sample(self, time):
+        return self.wave.sample(time - self.tranlation)
+
 class Transition(object):
     def __init__(self, wave_1, wave_2, start_time, end_time):
         self.wave_1 = wave_1
