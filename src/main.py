@@ -11,8 +11,7 @@ from pong import Pong
 from mixer import Mixer
 import time
 import multiprocessing
-if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-    import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 def mixer_process_function():
     """This function is meant to be placed into is own process and loops in
@@ -37,9 +36,8 @@ if __name__ == "__main__":
     schedule = Scheduler()
     schedule.insert(lambda x: pong.update(x), 60.0)
     schedule.insert(lambda x: pong.render(), 15.0)
-    # Start the sound process if running on the pi
-    if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-        sound_process = multiprocessing.Process(target = mixer_process_function)
-        sound_process.start()
+    # Start the sound process
+    sound_process = multiprocessing.Process(target = mixer_process_function)
+    sound_process.start()
     # Start the scheduler
     schedule.start()

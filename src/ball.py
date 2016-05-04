@@ -6,10 +6,7 @@ This module implements the ball which is presented to the players
 
 import consts
 import random
-
-if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-    import RPi.GPIO as GPIO
-
+import RPi.GPIO as GPIO
 import game_object
 from vector import Vector, rect_intersect
 
@@ -50,13 +47,12 @@ class Ball(game_object.GameObject):
         self.intersect_bat(right_bat)
 
         # Set the LED display which shows the horizontal position
-        if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-            # Get the "index" of the LED to illuminate
-            rounded_pos = int(len(consts.LED_GPIO_CODE) * self.position.x / consts.WORLD_WIDTH)
-            # Zip the LED GPIO codes with whether they should be illuminated,
-            # then write out the boolean value to the correct port
-            for port, status in zip(consts.LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(consts.LED_GPIO_CODE)))):
-                GPIO.output(port, status)
+        # Get the "index" of the LED to illuminate
+        rounded_pos = int(len(consts.LED_GPIO_CODE) * self.position.x / consts.WORLD_WIDTH)
+        # Zip the LED GPIO codes with whether they should be illuminated,
+        # then write out the boolean value to the correct port
+        for port, status in zip(consts.LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(consts.LED_GPIO_CODE)))):
+            GPIO.output(port, status)
 
     def intersect_bat(self, bat):
         """Preform the collision detection and reaction"""
