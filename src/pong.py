@@ -14,9 +14,10 @@ if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
 class Pong:
     def __init__(self):
         self.output = terminal_writer.Writer(consts.SERIAL_OUTPUT, True)
-        self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(8, 8), terminal_writer.COLOUR_YELLOW)
+        self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(0, 0), terminal_writer.COLOUR_YELLOW)
         self.left_bat = Bat((math.pi * -0.25, 0, math.pi * 0.25), consts.CONTROL_1_ADDR, Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
         self.right_bat = Bat((math.pi * -0.75, math.pi, math.pi * 0.75), consts.CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
+        self.ball.attached_bat = self.left_bat
         self.left_score = 0
         self.right_score = 0
         if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
