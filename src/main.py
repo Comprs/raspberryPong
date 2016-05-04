@@ -6,7 +6,7 @@ Main execution point
 
 import consts
 import init_state
-from scheduler import Scheduler
+import scheduler
 from pong import Pong
 from mixer import Mixer
 import time
@@ -33,11 +33,11 @@ if __name__ == "__main__":
     # Create the game object
     pong = Pong()
     # Create the scheduler and register some events
-    schedule = Scheduler()
-    schedule.insert(lambda x: pong.update(x), 60.0)
-    schedule.insert(lambda x: pong.render(), 15.0)
+    game_scheduler = scheduler.Scheduler()
+    game_scheduler.insert(lambda x: pong.update(x), 60.0)
+    game_scheduler.insert(lambda x: pong.render(), 15.0)
     # Start the sound process
     sound_process = multiprocessing.Process(target = mixer_process_function)
     sound_process.start()
     # Start the scheduler
-    schedule.start()
+    game_scheduler.start()

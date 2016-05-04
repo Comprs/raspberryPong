@@ -8,7 +8,7 @@ import consts
 import random
 import RPi.GPIO as GPIO
 import game_object
-from vector import Vector, rect_intersect
+import vector
 
 class Ball(game_object.GameObject):
     """The Ball class which represents a ball"""
@@ -25,8 +25,8 @@ class Ball(game_object.GameObject):
 
         if self.attached_bat != None:
             self.position.y = self.attached_bat.position.y + 0.3 * self.attached_bat.size.y
-            self.position.x = self.attached_bat.position.x + (Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
-            self.velocity = Vector(0, 0)
+            self.position.x = self.attached_bat.position.x + (vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
+            self.velocity = vector.Vector(0, 0)
 
         # Perform the movement
         super(Ball, self).update(time)
@@ -59,7 +59,7 @@ class Ball(game_object.GameObject):
 
         # Check that the ball has collided with the bat based on the two
         # bounding boxes
-        if rect_intersect(self.position, self.size, bat.position, bat.size):
+        if vector.rect_intersect(self.position, self.size, bat.position, bat.size):
             # Queue up the sound effect for playing
             consts.MIXER_QUEUE.put((consts.BALL_BOUNCE_SFX, 0.25))
 
@@ -74,7 +74,7 @@ class Ball(game_object.GameObject):
 
             # Update the velocity to the new value based on the return angle
             # and a random value for the new speed
-            self.velocity = Vector.create_with_angle(return_angle) * (80.0 / random.choice([2, 2, 2, 5, 5, 5, 15]))
+            self.velocity = vector.Vector.create_with_angle(return_angle) * (80.0 / random.choice([2, 2, 2, 5, 5, 5, 15]))
 
             # Correct the position based upon the new velocity
             if self.velocity.x > 0:
@@ -84,5 +84,5 @@ class Ball(game_object.GameObject):
 
     def serve(self, bat_num):
         if self.attached_bat != None and bat_num == self.attached_bat.control_address:
-            self.velocity = Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
+            self.velocity = vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
             self.attached_bat = None

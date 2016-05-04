@@ -4,8 +4,8 @@
 which are used in the game
 """
 
-from vector import Vector
-from consts import WORLD_WIDTH, WORLD_HEIGHT
+import vector
+import consts
 import terminal_writer
 
 class GameObject(object):
@@ -19,9 +19,9 @@ class GameObject(object):
         colour: the colour which the renderer will render with
     """
     def __init__(self):
-        self.position = Vector(0, 0)
-        self.size = Vector(0, 0)
-        self.velocity = Vector(0, 0)
+        self.position = vector.Vector(0, 0)
+        self.size = vector.Vector(0, 0)
+        self.velocity = vector.Vector(0, 0)
         self.colour = terminal_writer.COLOUR_WHITE
 
     def render(self):
@@ -34,7 +34,7 @@ class GameObject(object):
             (x, y): self.colour
             for x in range(x_origin, x_origin + self.size.x)
             for y in range(y_origin, y_origin + self.size.y)
-            if x >= 0 and x < WORLD_WIDTH and y >= 0 and y < WORLD_HEIGHT
+            if x >= 0 and x < consts.WORLD_WIDTH and y >= 0 and y < consts.WORLD_HEIGHT
         }
 
     def update(self, time):
