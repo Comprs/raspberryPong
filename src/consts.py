@@ -5,6 +5,8 @@
 import multiprocessing
 import wave_gen
 import wave_trans
+import vector
+import terminal_writer
 
 class PossibleTargets:
     GENERIC_TERMINAL = 0
@@ -28,6 +30,21 @@ PLAYER_2_SERVE = 11
 
 PLAYER_1_ENLARGE = 9
 PLAYER_2_ENLARGE = 8
+
+LEFT_BAT_RETURN_ANGLES = (math.pi * -0.25, 0, math.pi * 0.25)
+LEFT_BAT_COLOUR = terminal_writer.COLOUR_GREEN
+LEFT_BAT_INIT_POSITION = vector.Vector(3, 18)
+
+RIGHT_BAT_RETURN_ANGLES = (math.pi * -0.75, math.pi, math.pi * 0.75)
+RIGHT_BAT_COLOUR = terminal_writer.COLOUR_CYAN
+RIGHT_BAT_INIT_POSITION = vector.Vector(76, 18)
+
+BAT_SIZE = vector.Vector(1, 3)
+BAT_ENLARGE_SIZE = vector.Vector(1, 5)
+BAT_ENLARGE_TIME = 15.0
+
+BALL_SIZE = vector.Vector(1, 1)
+BALL_COLOUR = terminal_writer.COLOUR_YELLOW
 
 MUSIC_SEQ = None
 MIXER_QUEUE = multiprocessing.Queue()

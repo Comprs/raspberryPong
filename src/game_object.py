@@ -6,6 +6,7 @@ which are used in the game
 
 from vector import Vector
 from consts import WORLD_WIDTH, WORLD_HEIGHT
+import terminal_writer
 
 class GameObject(object):
     """This object is derived by other game objects in order to reuse the 
@@ -17,11 +18,11 @@ class GameObject(object):
         velocity: the initial velocity of the object
         colour: the colour which the renderer will render with
     """
-    def __init__(self, position, size, velocity, colour):
-        self.position = position
-        self.size = size
-        self.velocity = velocity
-        self.colour = colour
+    def __init__(self):
+        self.position = Vector(0, 0)
+        self.size = Vector(0, 0)
+        self.velocity = Vector(0, 0)
+        self.colour = terminal_writer.COLOUR_WHITE
 
     def render(self):
         """Draw out the game object based on the size and position of the

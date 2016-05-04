@@ -3,22 +3,34 @@
 from itertools import cycle
 import math
 import terminal_writer
-from vector import Vector
 from number_renderer import convert_number
 import consts
-from ball import Ball
-from bat import Bat
+import ball
+import bat
 import RPi.GPIO as GPIO
 
 class Pong:
     def __init__(self):
         self.output = terminal_writer.Writer(consts.SERIAL_OUTPUT, True)
-        self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(0, 0), terminal_writer.COLOUR_YELLOW)
-        self.left_bat = Bat((math.pi * -0.25, 0, math.pi * 0.25), consts.CONTROL_1_ADDR, Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
-        self.right_bat = Bat((math.pi * -0.75, math.pi, math.pi * 0.75), consts.CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
+
+        self.left_bat = bat.Bat(consts.LEFT_BAT_RETURN_ANGLES, consts.CONTROL_1_ADDR)
+        self.left_bat.position = consts.LEFT_BAT_INIT_POSITION
+        self.left_bat.size = consts.BAT_SIZE
+        self.left_bat.colour = consts.LEFT_BAT_COLOUR
+
+        self.right_bat = bat.Bat(consts.RIGHT_BAT_RETURN_ANGLES, consts.CONTROL_2_ADDR)
+        self.right_bat.position = consts.RIGHT_BAT_INIT_POSITION
+        self.right_bat.size = consts.BAT_SIZE
+        self.right_bat.colour = consts.RIGHT_BAT_COLOUR
+
+        self.ball = ball.Ball()
+        self.ball.size = consts.BALL_SIZE
+        self.ball.colour = consts.BALL_COLOUR
         self.ball.attached_bat = self.left_bat
+
         self.left_score = 0
         self.right_score = 0
+
         GPIO.add_event_detect(consts.PLAYER_1_SERVE, GPIO.RISING, lambda x: self.ball.serve(consts.CONTROL_1_ADDR), bouncetime = 200)
         GPIO.add_event_detect(consts.PLAYER_1_ENLARGE, GPIO.RISING, lambda x: self.ball.enlarge(), bouncetime = 200)
         GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda x: self.ball.serve(consts.CONTROL_2_ADDR), bouncetime = 200)
