@@ -41,4 +41,4 @@ class GlowSequencer(object):
         for i in self.pattern_stack:
             sample_buffer.update(i.sample(self.current_time))
         for (led, value) in sample_buffer.items():
-            self.pi_glow_obj.led(key, value)
+            self.pi_glow_obj.led(led, value)

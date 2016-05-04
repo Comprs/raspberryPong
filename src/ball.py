@@ -26,6 +26,11 @@ class Ball(game_object.GameObject):
         has collided and should then bounce
         """
 
+        if self.attached_bat != None:
+            self.position.y = self.attached_bat.position.y + 0.3 * self.attached_bat.size.y
+            self.position.x = self.attached_bat.position.x + (Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
+            self.velocity = Vector(0, 0)
+
         # Perform the movement
         super(Ball, self).update(time)
 
@@ -82,5 +87,6 @@ class Ball(game_object.GameObject):
                 self.position.x = bat.position.x - self.size.x
 
     def serve(self, bat_num):
-        if bat_num == self.attached_bat:
-            pass
+        if self.attached_bat != None and bat_num == self.attached_bat.control_address:
+            self.velocity = Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
+            self.attached_bat = None

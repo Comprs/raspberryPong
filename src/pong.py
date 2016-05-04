@@ -14,16 +14,17 @@ if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
 class Pong:
     def __init__(self):
         self.output = terminal_writer.Writer(consts.SERIAL_OUTPUT, True)
-        self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(8, 8), terminal_writer.COLOUR_YELLOW)
+        self.ball = Ball(Vector(40, 20), Vector(1, 1), Vector(0, 0), terminal_writer.COLOUR_YELLOW)
         self.left_bat = Bat((math.pi * -0.25, 0, math.pi * 0.25), consts.CONTROL_1_ADDR, Vector(3, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_GREEN)
-        self.right_bat = Bat((math.pi * -0.75, 0, math.pi * 0.75), consts.CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
+        self.right_bat = Bat((math.pi * -0.75, math.pi, math.pi * 0.75), consts.CONTROL_2_ADDR, Vector(76, 18), Vector(1, 3), Vector(0, 0), terminal_writer.COLOUR_CYAN)
+        self.ball.attached_bat = self.left_bat
         self.left_score = 0
         self.right_score = 0
         if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-            GPIO.add_event_detect(consts.PLAYER_1_SERVE, GPIO.RISING, lambda: self.ball.serve(1), bouncetime = 200)
-            GPIO.add_event_detect(consts.PLAYER_1_ENLARGE, GPIO.RISING, lambda: self.ball.enlarge, bouncetime = 200)
-            GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda: self.ball.serve(2), bouncetime = 200)
-            GPIO.add_event_detect(consts.PLAYER_2_ENLARGE, GPIO.RISING, lambda: self.ball.enlarge, bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_1_SERVE, GPIO.RISING, lambda x: self.ball.serve(consts.CONTROL_1_ADDR), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_1_ENLARGE, GPIO.RISING, lambda x: self.ball.enlarge(), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda x: self.ball.serve(consts.CONTROL_2_ADDR), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_2_ENLARGE, GPIO.RISING, lambda x: self.ball.enlarge(), bouncetime = 200)
 
     def render(self):
         render_dict = {}
@@ -41,8 +42,8 @@ class Pong:
         self.right_bat.update(time, self.ball.position.y)
         if self.ball.position.x <= 0:
             self.right_score += 1
-            self.ball.position = Vector(40, 20)
+            self.ball.attached_bat = self.left_bat
         elif self.ball.position.x + self.ball.size.x >= consts.WORLD_WIDTH:
             self.left_score += 1
-            self.ball.position = Vector(40, 20)
-
+            self.ball.attached_bat = self.right_bat
+        self.ball.serve(None)

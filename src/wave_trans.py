@@ -144,7 +144,7 @@ class Translate(object):
         self.translation = translation
 
     def sample(self, time):
-        return self.wave.sample(time - self.tranlation)
+        return self.wave.sample(time - self.translation)
 
 class Transition(object):
     def __init__(self, wave_1, wave_2, start_time, end_time):
