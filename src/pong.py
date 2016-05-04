@@ -20,10 +20,10 @@ class Pong:
         self.left_score = 0
         self.right_score = 0
         if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-            GPIO.add_event_detect(consts.PLAYER_1_SERVE, GPIO.RISING, lambda: self.ball.serve(1), bouncetime = 200)
-            GPIO.add_event_detect(consts.PLAYER_1_ENLARGE, GPIO.RISING, lambda: self.ball.enlarge, bouncetime = 200)
-            GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda: self.ball.serve(2), bouncetime = 200)
-            GPIO.add_event_detect(consts.PLAYER_2_ENLARGE, GPIO.RISING, lambda: self.ball.enlarge, bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_1_SERVE, GPIO.RISING, lambda x: self.ball.serve(1), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_1_ENLARGE, GPIO.RISING, lambda x: self.ball.enlarge(), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda x: self.ball.serve(2), bouncetime = 200)
+            GPIO.add_event_detect(consts.PLAYER_2_ENLARGE, GPIO.RISING, lambda x: self.ball.enlarge(), bouncetime = 200)
 
     def render(self):
         render_dict = {}
