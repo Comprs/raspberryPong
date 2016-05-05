@@ -8,8 +8,8 @@ import wave_trans
 import vector
 import terminal_writer
 import glow_seq
-
-CURRENT_TARGET = PossibleTargets.GENERIC_TERMINAL
+import math
+import py_glow
 
 WORLD_WIDTH = 80
 WORLD_HEIGHT = 40
