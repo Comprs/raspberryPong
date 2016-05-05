@@ -6,7 +6,7 @@ predefined waves together over time
 """
 
 import math
-from wave_trans import TimedWave
+import wave_trans
 
 class Sequencer(object):
     """A class which sequences waves
@@ -41,7 +41,7 @@ class Sequencer(object):
                              .format(start_point))
 
         # Wrap the wave and associated wave points into an item for insertion
-        item = TimedWave(wave, start_point, end_point)
+        item = wave_trans.TimedWave(wave, start_point, end_point)
 
         # Calculate the bounding indexes of the wave for the chunk list
         start_index = int(math.floor(start_point / self.chunk_granularity))

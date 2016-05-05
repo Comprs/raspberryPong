@@ -6,12 +6,9 @@ This module implements the ball which is presented to the players
 
 import consts
 import random
-
-if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-    import RPi.GPIO as GPIO
-
+import RPi.GPIO as GPIO
 import game_object
-from vector import Vector, rect_intersect
+import vector
 
 class Ball(game_object.GameObject):
     """The Ball class which represents a ball"""
@@ -25,11 +22,14 @@ class Ball(game_object.GameObject):
         the two bats which will also be in the world in order to check if it
         has collided and should then bounce
         """
-
+        # If the ball is attached to a bat, the ball should move to be in front
+        # of the bat and zero its velocity
         if self.attached_bat != None:
             self.position.y = self.attached_bat.position.y + 0.3 * self.attached_bat.size.y
-            self.position.x = self.attached_bat.position.x + (Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
-            self.velocity = Vector(0, 0)
+            # The position to move the ball to is derived from the middle return
+            # normal of the bat which should be horizontal to the bat
+            self.position.x = self.attached_bat.position.x + (vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
+            self.velocity = vector.Vector(0, 0)
 
         # Perform the movement
         super(Ball, self).update(time)
@@ -50,20 +50,19 @@ class Ball(game_object.GameObject):
         self.intersect_bat(right_bat)
 
         # Set the LED display which shows the horizontal position
-        if consts.CURRENT_TARGET == consts.PossibleTargets.RBPI:
-            # Get the "index" of the LED to illuminate
-            rounded_pos = int(len(consts.LED_GPIO_CODE) * self.position.x / consts.WORLD_WIDTH)
-            # Zip the LED GPIO codes with whether they should be illuminated,
-            # then write out the boolean value to the correct port
-            for port, status in zip(consts.LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(consts.LED_GPIO_CODE)))):
-                GPIO.output(port, status)
+        # Get the "index" of the LED to illuminate
+        rounded_pos = int(len(consts.LED_GPIO_CODE) * self.position.x / consts.WORLD_WIDTH)
+        # Zip the LED GPIO codes with whether they should be illuminated,
+        # then write out the boolean value to the correct port
+        for port, status in zip(consts.LED_GPIO_CODE, map(lambda x: x == rounded_pos, range(len(consts.LED_GPIO_CODE)))):
+            GPIO.output(port, status)
 
     def intersect_bat(self, bat):
         """Preform the collision detection and reaction"""
 
         # Check that the ball has collided with the bat based on the two
         # bounding boxes
-        if rect_intersect(self.position, self.size, bat.position, bat.size):
+        if vector.rect_intersect(self.position, self.size, bat.position, bat.size):
             # Queue up the sound effect for playing
             consts.MIXER_QUEUE.put((consts.BALL_BOUNCE_SFX, 0.25))
 
@@ -78,7 +77,7 @@ class Ball(game_object.GameObject):
 
             # Update the velocity to the new value based on the return angle
             # and a random value for the new speed
-            self.velocity = Vector.create_with_angle(return_angle) * (80.0 / random.choice([2, 2, 2, 5, 5, 5, 15]))
+            self.velocity = vector.Vector.create_with_angle(return_angle) * (80.0 / random.choice([2, 2, 2, 5, 5, 5, 15]))
 
             # Correct the position based upon the new velocity
             if self.velocity.x > 0:
@@ -87,6 +86,14 @@ class Ball(game_object.GameObject):
                 self.position.x = bat.position.x - self.size.x
 
     def serve(self, bat_num):
+        """Serve the ball if the provided bat_num matches the control_address
+        in the bat
+        """
+        # Check that the ball is actually attached to avoid accessing the
+        # control_address of a "None"
         if self.attached_bat != None and bat_num == self.attached_bat.control_address:
-            self.velocity = Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
+            # Launch the ball in the direction of the reflection normal in the
+            # middle of the bat
+            self.velocity = vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
+            # Indicate that we are now detached
             self.attached_bat = None

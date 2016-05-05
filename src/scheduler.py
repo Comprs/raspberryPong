@@ -8,9 +8,9 @@ task may have a different scheduling frequency.
 
 import time
 import heapq
-from functools import total_ordering
+import functools
 
-@total_ordering
+@functools.total_ordering
 class Task(object):
     """A class representing a task.
 
