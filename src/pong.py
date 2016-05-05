@@ -8,6 +8,7 @@ import consts
 import ball
 import bat
 import RPi.GPIO as GPIO
+import glow_seq
 
 class Pong:
     def __init__(self):
@@ -36,6 +37,9 @@ class Pong:
         GPIO.add_event_detect(consts.PLAYER_2_SERVE, GPIO.RISING, lambda x: self.ball.serve(consts.CONTROL_2_ADDR), bouncetime = 200)
         GPIO.add_event_detect(consts.PLAYER_2_ENLARGE, GPIO.RISING, lambda x: self.ball.enlarge(), bouncetime = 200)
 
+        self.glow_seq = glow_seq.GlowSequencer()
+        self.glow_seq.insert(consts.NORMAL_PATTERN, float("inf"))
+
     def render(self):
         render_dict = {}
         render_dict.update({ (40, y): terminal_writer.COLOUR_WHITE for (y, do_draw) in zip(range(consts.WORLD_HEIGHT), cycle([False, False, True, True])) if do_draw })
@@ -53,7 +57,12 @@ class Pong:
         if self.ball.position.x <= 0:
             self.right_score += 1
             self.ball.attached_bat = self.left_bat
+            self.glow_seq.insert(consts.SCORE_PATTERN, consts.SCORE_PATTERN_LENGTH)
         elif self.ball.position.x + self.ball.size.x >= consts.WORLD_WIDTH:
             self.left_score += 1
             self.ball.attached_bat = self.right_bat
+            self.glow_seq.insert(consts.SCORE_PATTERN, consts.SCORE_PATTERN_LENGTH)
         self.ball.serve(None)
+
+    def update_glow(self, time):
+        self.glow_seq.sample(time)

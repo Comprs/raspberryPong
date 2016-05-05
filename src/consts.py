@@ -7,6 +7,7 @@ import wave_gen
 import wave_trans
 import vector
 import terminal_writer
+import glow_seq
 
 class PossibleTargets:
     GENERIC_TERMINAL = 0
@@ -58,3 +59,28 @@ INPUT_THRESHOLD = 0
 VOLTS = 3
 VMIN = 0.5
 VMAX = 2.5
+
+NORMAL_PATTERN = glow_seq.GlowPattern()
+for (index, tri_led) in enumerate(py_glow.COLOR_LED_LIST):
+    sine_wave = wave_gen.SineWave(1.0 / 3.0)
+    offset = wave_trans.Translate(sine_wave, index)
+    if index == 0:
+        mapped = wave_trans.Map(offset, lambda x: int((x + 1.0) * 32 + 1))
+    else:
+        mapped = wave_trans.Map(offset, lambda x: int((x + 1.0) * 64 + 1))
+    for led in tri_led:
+        NORMAL_PATTERN.insert(led, mapped)
+
+SCORE_PATTERN = glow_seq.GlowPattern()
+for (index, tri_led) in enumerate(py_glow.COLOR_LED_LIST):
+    sine_wave = wave_gen.SineWave(1.0 / 3.0)
+    offset = wave_trans.Translate(sine_wave, index)
+    compressed = wave_trans.Compress(offset, 5)
+    if index == 0:
+        mapped = wave_trans.Map(compressed, lambda x: int((x + 1.0) * 32 + 1))
+    else:
+        mapped = wave_trans.Map(compressed, lambda x: int((x + 1.0) * 64 + 1))
+    for led in tri_led:
+        SCORE_PATTERN.insert(led, mapped)
+
+SCORE_PATTERN_LENGTH = 3.0
