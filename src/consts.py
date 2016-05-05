@@ -9,10 +9,6 @@ import vector
 import terminal_writer
 import glow_seq
 
-class PossibleTargets:
-    GENERIC_TERMINAL = 0
-    RBPI = 1
-
 CURRENT_TARGET = PossibleTargets.GENERIC_TERMINAL
 
 WORLD_WIDTH = 80

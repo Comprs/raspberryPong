@@ -22,9 +22,12 @@ class Ball(game_object.GameObject):
         the two bats which will also be in the world in order to check if it
         has collided and should then bounce
         """
-
+        # If the ball is attached to a bat, the ball should move to be in front
+        # of the bat and zero its velocity
         if self.attached_bat != None:
             self.position.y = self.attached_bat.position.y + 0.3 * self.attached_bat.size.y
+            # The position to move the ball to is derived from the middle return
+            # normal of the bat which should be horizontal to the bat
             self.position.x = self.attached_bat.position.x + (vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
             self.velocity = vector.Vector(0, 0)
 
@@ -83,6 +86,14 @@ class Ball(game_object.GameObject):
                 self.position.x = bat.position.x - self.size.x
 
     def serve(self, bat_num):
+        """Serve the ball if the provided bat_num matches the control_address
+        in the bat
+        """
+        # Check that the ball is actually attached to avoid accessing the
+        # control_address of a "None"
         if self.attached_bat != None and bat_num == self.attached_bat.control_address:
+            # Launch the ball in the direction of the reflection normal in the
+            # middle of the bat
             self.velocity = vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
+            # Indicate that we are now detached
             self.attached_bat = None

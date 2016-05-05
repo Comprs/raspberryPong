@@ -33,7 +33,7 @@ class Writer:
 
         # The changed cells are the cells which have either been lit up since
         # the previous render or have changed colour
-        changed_cells = {i for (i, j) in new_state.items() if j != self.last_state.get(i)}
+        changed_cells = {coordinate for (coordinate, colour) in new_state.items() if colour != self.last_state.get(coordinate)}
 
         for (x, y) in dark_cells:
             self.mask_dot(x, y)
@@ -115,4 +115,3 @@ class Writer:
         self.reset_colours()
         self.set_cursor_position(0, 0)
         self.flush_output()
-

@@ -17,13 +17,16 @@ def mixer_process_function():
     """This function is meant to be placed into is own process and loops in
     order to play the sounds without delay
     """
+    # Initialise the mixer and provide a callback to output to the GPIO port
     mixer = Mixer(lambda x: GPIO.output(consts.BUZZER_GPIO_CODE, x > 0.0))
     time_old = time.time()
     while True:
         time_now = time.time()
+        # Take from the queue and insert into the mixer
         while not consts.MIXER_QUEUE.empty():
             mixer.insert(*consts.MIXER_QUEUE.get())
         time_delta = time_now - time_old
+        # Sample the mixer to provide output
         mixer.sample(time_delta)
         time_old = time_now
 

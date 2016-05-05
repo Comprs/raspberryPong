@@ -16,21 +16,27 @@ from note_gen import get_frequency, ChromaticSeries
 def init():
     consts.BUS = smbus.SMBus(1)
 
+    # Setup the GPIO
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
+
+    # Setup all of the LED GPIO ports for writing out
     for i in consts.LED_GPIO_CODE:
         GPIO.setup(i, GPIO.OUT)
 
+    # Setup all of the controller buttons for reading in
     for i in [consts.PLAYER_1_SERVE,
               consts.PLAYER_2_SERVE,
               consts.PLAYER_1_ENLARGE,
               consts.PLAYER_2_ENLARGE]:
         GPIO.setup(i, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+    # Setup the serial link for the display
     consts.SERIAL_OUTPUT = Serial("/dev/ttyAMA0", 38400)
 
     seq = sequencer.Sequencer()
-    
+
+    # Define the music
     music = [(ChromaticSeries.C, 0, 4, 0.0, 0.4), (ChromaticSeries.C, 0, 4, 0.5, 0.9),
              (ChromaticSeries.G, 0, 4, 1.0, 1.4), (ChromaticSeries.G, 0, 4, 1.5, 1.9),
              (ChromaticSeries.A, 0, 5, 2.0, 2.4), (ChromaticSeries.A, 0, 5, 2.5, 2.9),
@@ -59,7 +65,11 @@ def init():
     for (series, a, b, c, d) in music:
         seq.insert(wave_gen.SquareWave(get_frequency(series, a, b)), c, d)
 
+    # Loop the music infinitely and store it
     consts.MUSIC_SEQ = wave_trans.Loop(seq, 24.5)
+
+    # Place the music into the mixer
     consts.MIXER_QUEUE.put((consts.MUSIC_SEQ, float("inf")))
 
+    # Setup the GPIO port for the buzzer to output
     GPIO.setup(consts.BUZZER_GPIO_CODE, GPIO.OUT)
