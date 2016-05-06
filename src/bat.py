@@ -4,7 +4,6 @@
 This module implements the bat which is controlled by the player in game
 """
 
-import random
 import consts
 import game_object
 import time
@@ -18,7 +17,7 @@ class Bat(game_object.GameObject):
         control_address: The numerical address of the ADC to control the
             position of the bat
     """
-    def __init__(self, return_angles, control_address = None, *args, **kwargs):
+    def __init__(self, return_angles, control_address, *args, **kwargs):
         self.return_angles = return_angles
         self.control_address = control_address
         self.next_shrink = 0.0
@@ -35,31 +34,28 @@ class Bat(game_object.GameObject):
         # reset the bat's size to the default value
         if time.time() >= self.next_shrink:
             self.size = consts.BAT_SIZE
-        if self.control_address == None:
-            self.position.y = ball_y_pos - random.choice([0, 0, 0, 1, 2, 2, 2])
-        else:
-            # Get the data from the bus
-            consts.BUS.write_byte(consts.CONTROL_I2C_ADDR, self.control_address)
-            bus_value = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
+        # Get the data from the bus
+        consts.BUS.write_byte(consts.CONTROL_I2C_ADDR, self.control_address)
+        bus_value = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
 
-            # Byte swap the value
-            swapped_value = ((bus_value & 0x000F) << 6) | ((bus_value & 0xFC00) >> 10)
+        # Byte swap the value
+        swapped_value = ((bus_value & 0x000F) << 6) | ((bus_value & 0xFC00) >> 10)
 
-            # Get a value as a ratio of the measured value to the maximum value
-            value_ratio = swapped_value / float(consts.ADC_SIGNAL_MAX)
+        # Get a value as a ratio of the measured value to the maximum value
+        value_ratio = swapped_value / float(consts.ADC_SIGNAL_MAX)
 
-            # Clip the ratio to remove the bottom and top 0.5V
-            clipped_ratio = max(min(value_ratio, consts.ADC_RATIO_MAX), consts.ADC_RATIO_MIN)
+        # Clip the ratio to remove the bottom and top 0.5V
+        clipped_ratio = max(min(value_ratio, consts.ADC_RATIO_MAX), consts.ADC_RATIO_MIN)
 
-            # Rescale the ratio so that the value ranges from 0 to 1
-            scaled_ratio = (clipped_ratio - consts.ADC_RATIO_MIN) / (consts.ADC_RATIO_MAX - consts.ADC_RATIO_MIN)
+        # Rescale the ratio so that the value ranges from 0 to 1
+        scaled_ratio = (clipped_ratio - consts.ADC_RATIO_MIN) / (consts.ADC_RATIO_MAX - consts.ADC_RATIO_MIN)
 
-            # Calculate the position of the bat
-            new_position_y = scaled_ratio * (consts.WORLD_HEIGHT - self.size.y)
+        # Calculate the position of the bat
+        new_position_y = scaled_ratio * (consts.WORLD_HEIGHT - self.size.y)
 
-            # Set the position if the movement is large enough
-            if abs(new_position_y - self.position.y) > consts.INPUT_THRESHOLD:
-                self.position.y = new_position_y
+        # Set the position if the movement is large enough
+        if abs(new_position_y - self.position.y) > consts.INPUT_THRESHOLD:
+            self.position.y = new_position_y
 
         super(Bat, self).update(time_delta)
 
