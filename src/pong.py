@@ -75,8 +75,8 @@ class Pong:
         render_dict.update({ (40, y): terminal_writer.COLOUR_WHITE for (y, do_draw) in zip(range(consts.WORLD_HEIGHT), cycle([False, False, True, True])) if do_draw })
 
         # Render the two scores
-        render_dict.update(convert_number(self.left_score, (29, 1)))
-        render_dict.update(convert_number(self.right_score, (49, 1)))
+        render_dict.update(convert_number(self.left_score, (29, 1), terminal_writer.COLOUR_RED))
+        render_dict.update(convert_number(self.right_score, (49, 1), terminal_writer.COLOUR_BLUE))
 
         # Render the ball
         render_dict.update(self.ball.render())
