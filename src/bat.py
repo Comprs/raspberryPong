@@ -37,12 +37,26 @@ class Bat(game_object.GameObject):
         if self.control_address == None:
             self.position.y = ball_y_pos - random.choice([0, 0, 0, 1, 2, 2, 2])
         else:
+            # Get the data from the bus
             consts.BUS.write_byte(consts.CONTROL_I2C_ADDR, self.control_address)
-            tmp = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
-            swap_tmp = ((tmp & 0x00FF) << 6) | ((tmp & 0xFF00) >> 10 )
-            swap_tmp = max(min(swap_tmp, consts.VMAX), consts.VMIN)
-            height_ratio = (swap_tmp - consts.VMIN) / (consts.VMAX - consts.VMIN)
-            new_position_y = height_ratio * consts.WORLD_HEIGHT
+            bus_value = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
+
+            # Byte swap the value
+            swapped_value = ((bus_value & 0x00FF) << 8) | ((bus_value & 0xFF00) >> 8)
+
+            # Get a value as a ratio of the measured value to the maximum value
+            value_ratio = swapped_value / float(consts.ADC_SIGNAL_MAX)
+
+            # Clip the ratio to remove the bottom and top 0.5V
+            clipped_ratio = max(min(value_ratio, consts.ADC_RATIO_MAX), consts.ADC_RATIO_MIN)
+
+            # Rescale the ratio so that the value ranges from 0 to 1
+            scaled_ratio = (clipped_ratio - consts.ADC_RATIO_MIN) / (consts.ADC_RATIO_MAX - consts.ADC_RATIO_MIN)
+
+            # Calculate the position of the bat
+            new_position_y = scaled_ratio * (consts.WORLD_HEIGHT - self.size.y)
+
+            # Set the position if the movement is large enough
             if abs(new_position_y - self.position.y) > consts.INPUT_THRESHOLD:
                 self.position.y = new_position_y
 
