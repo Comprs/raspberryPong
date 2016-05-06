@@ -42,7 +42,7 @@ class Bat(game_object.GameObject):
             bus_value = consts.BUS.read_word_data(consts.CONTROL_I2C_ADDR, 0x00)
 
             # Byte swap the value
-            swapped_value = ((bus_value & 0x0007) << 6) | ((bus_value & 0xFC00) >> 10)
+            swapped_value = ((bus_value & 0x000F) << 6) | ((bus_value & 0xFC00) >> 10)
 
             # Get a value as a ratio of the measured value to the maximum value
             value_ratio = swapped_value / float(consts.ADC_SIGNAL_MAX)

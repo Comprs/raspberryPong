@@ -26,7 +26,7 @@ PLAYER_1_SERVE = 10
 PLAYER_2_SERVE = 11
 
 PLAYER_1_ENLARGE = 9
-PLAYER_2_ENLARGE = 8
+PLAYER_2_ENLARGE = 18
 
 LEFT_BAT_RETURN_ANGLES = (math.pi * -0.25, 0, math.pi * 0.25)
 LEFT_BAT_COLOUR = terminal_writer.COLOUR_GREEN
@@ -52,7 +52,7 @@ BALL_BOUNCE_SFX = wave_trans.attack_and_sustain(wave_trans.VaryWave(wave_gen.Squ
                                                 0, 0, 0.25)
 
 INPUT_THRESHOLD = 0
-ADC_SIGNAL_MAX = 0b111111111
+ADC_SIGNAL_MAX = 0b1000000000
 ADC_RATIO_MIN = 0.5 / 3.0
 ADC_RATIO_MAX = 2.5 / 3.0
 
