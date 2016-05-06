@@ -9,6 +9,7 @@ import random
 import RPi.GPIO as GPIO
 import game_object
 import vector
+import math
 
 class Ball(game_object.GameObject):
     """The Ball class which represents a ball"""
@@ -25,10 +26,10 @@ class Ball(game_object.GameObject):
         # If the ball is attached to a bat, the ball should move to be in front
         # of the bat and zero its velocity
         if self.attached_bat != None:
-            self.position.y = self.attached_bat.position.y + 0.3 * self.attached_bat.size.y
+            self.position.y = self.attached_bat.position.y + 0.5 * (self.attached_bat.size.y - self.size.y)
             # The position to move the ball to is derived from the middle return
             # normal of the bat which should be horizontal to the bat
-            self.position.x = self.attached_bat.position.x + (vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 3.0).x
+            self.position.x = self.attached_bat.position.x + (vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 1.1).x
             self.velocity = vector.Vector(0, 0)
 
         # Perform the movement
@@ -94,6 +95,6 @@ class Ball(game_object.GameObject):
         if self.attached_bat != None and bat_num == self.attached_bat.control_address:
             # Launch the ball in the direction of the reflection normal in the
             # middle of the bat
-            self.velocity = vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 5.0
+            self.velocity = vector.Vector.create_with_angle(self.attached_bat.return_angles[1]) * 15.0
             # Indicate that we are now detached
             self.attached_bat = None

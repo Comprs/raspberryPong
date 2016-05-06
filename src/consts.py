@@ -51,7 +51,7 @@ BALL_BOUNCE_SFX = wave_trans.attack_and_sustain(wave_trans.VaryWave(wave_gen.Squ
                                                                     wave_gen.SineWave(12)),
                                                 0, 0, 0.25)
 
-INPUT_THRESHOLD = 0
+INPUT_THRESHOLD = 1.2
 ADC_SIGNAL_MAX = 0b1000000000
 ADC_RATIO_MIN = 0.5 / 3.0
 ADC_RATIO_MAX = 2.5 / 3.0
