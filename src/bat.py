@@ -22,6 +22,7 @@ class Bat(game_object.GameObject):
         self.return_angles = return_angles
         self.control_address = control_address
         self.next_shrink = 0.0
+        self.enlarges_left = 2
         super(Bat, self).__init__(*args, **kwargs)
 
     def update(self, time_delta, ball_y_pos):
@@ -71,7 +72,9 @@ class Bat(game_object.GameObject):
 
     def enlarge(self):
         """Enlarge the bat"""
-        # Update the point when the bat will decrease it's size back to normal
-        self.next_shrink = time.time() + consts.BAT_ENLARGE_TIME
-        # Set the size
-        self.size = consts.BAT_ENLARGE_SIZE
+        if self.enlarges_left > 0:
+            self.enlarges_left -= 1
+            # Update the point when the bat will decrease it's size back to normal
+            self.next_shrink = time.time() + consts.BAT_ENLARGE_TIME
+            # Set the size
+            self.size = consts.BAT_ENLARGE_SIZE
