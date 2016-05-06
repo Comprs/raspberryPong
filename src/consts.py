@@ -14,7 +14,7 @@ import py_glow
 WORLD_WIDTH = 80
 WORLD_HEIGHT = 40
 LED_GPIO_CODE = [5, 6, 12, 13, 16, 19, 20, 26]
-BUZZER_GPIO_CODE = 2
+BUZZER_GPIO_CODE = 4
 CONTROL_I2C_ADDR = 0x21
 CONTROL_1_ADDR = 0x10
 CONTROL_2_ADDR = None
@@ -52,9 +52,9 @@ BALL_BOUNCE_SFX = wave_trans.attack_and_sustain(wave_trans.VaryWave(wave_gen.Squ
                                                 0, 0, 0.25)
 
 INPUT_THRESHOLD = 0
-VOLTS = 3
-VMIN = 0.5
-VMAX = 2.5
+ADC_SIGNAL_MAX = 0b1111111111
+ADC_RATIO_MIN = 0.5 / 3.0
+ADC_RATIO_MAX = 2.5 / 3.0
 
 NORMAL_PATTERN = glow_seq.GlowPattern()
 for (index, tri_led) in enumerate(py_glow.COLOR_LED_LIST):

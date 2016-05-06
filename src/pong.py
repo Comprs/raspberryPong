@@ -4,7 +4,7 @@
 This module defines the Pong game object
 """
 
-from itertools import cycle
+from itertools import cycle, repeat, chain
 import math
 import terminal_writer
 from number_renderer import convert_number
@@ -32,11 +32,13 @@ class Pong:
         self.right_bat.size = consts.BAT_SIZE
         self.right_bat.colour = consts.RIGHT_BAT_COLOUR
 
+        self.serving_pattern = cycle(chain(repeat(self.left_bat, 5), repeat(self.right_bat, 5)))
+
         # Initialise the ball and attach it to the left bat ready for serving
         self.ball = ball.Ball()
         self.ball.size = consts.BALL_SIZE
         self.ball.colour = consts.BALL_COLOUR
-        self.ball.attached_bat = self.left_bat
+        self.ball.attached_bat = next(self.serving_pattern)
 
         # Initialise the score
         self.left_score = 0
@@ -101,11 +103,11 @@ class Pong:
         # the score accordingly
         if self.ball.position.x <= 0:
             self.right_score += 1
-            self.ball.attached_bat = self.left_bat
+            self.ball.attached_bat = next(self.serving_pattern)
             self.glow_seq.insert(consts.SCORE_PATTERN, consts.SCORE_PATTERN_LENGTH)
         elif self.ball.position.x + self.ball.size.x >= consts.WORLD_WIDTH:
             self.left_score += 1
-            self.ball.attached_bat = self.right_bat
+            self.ball.attached_bat = next(self.serving_pattern)
             self.glow_seq.insert(consts.SCORE_PATTERN, consts.SCORE_PATTERN_LENGTH)
         self.ball.serve(None)
 
