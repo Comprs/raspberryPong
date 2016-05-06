@@ -13,6 +13,7 @@ import ball
 import bat
 import RPi.GPIO as GPIO
 import glow_seq
+import sys
 
 class Pong:
     """The Pong object which houses the state of the game"""
@@ -109,7 +110,9 @@ class Pong:
             self.left_score += 1
             self.ball.attached_bat = next(self.serving_pattern)
             self.glow_seq.insert(consts.SCORE_PATTERN, consts.SCORE_PATTERN_LENGTH)
-        self.ball.serve(None)
+        if self.left_score >= 10 or self.right_score >= 10:
+            self.render()
+            sys.exit()
 
     def update_glow(self, time):
         """Update the PiGlow
